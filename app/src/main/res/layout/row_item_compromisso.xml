@@ -23,13 +23,13 @@
 
         <TextView
             android:textSize="16dp"
+            android:textColor="#000000"
             android:id="@+id/tv_titulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
             android:gravity="left"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:lines="1"
             android:text="titulo"/>
 

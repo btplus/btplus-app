@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_line"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:background="@drawable/border_list"
+    android:layout_margin="10dp"
+    android:weightSum="5">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vaga de Operador 5"
+            android:id="@+id/tv_vaga"
+            android:gravity="center"
+            android:textSize="25dp"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:textColor="#000012"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Vaga de Operador 5"
+                    android:id="@+id/tv_curso1"
+                    android:gravity="left"
+                    android:textSize="14dp"
+                    />
+
+
+                <TextView
+                    android:textColor="#000012"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Vaga de Operador 5"
+                    android:id="@+id/tv_curso2"
+                    android:gravity="left"
+                    android:textSize="14dp"
+                    />
+
+
+                <TextView
+                    android:textColor="#000012"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Vaga de Operador 5"
+                    android:id="@+id/tv_faculdade"
+                    android:gravity="left"
+                    android:textSize="14dp"
+                    />
+
+
+                <TextView
+                    android:textColor="#000012"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Vaga de Operador 5"
+                    android:id="@+id/tv_tempo_empresa"
+                    android:gravity="left"
+                    android:textSize="14dp"
+                    />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_weight="2"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="50%"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/tv_percentage"
+                android:gravity="right"
+                android:textSize="60dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

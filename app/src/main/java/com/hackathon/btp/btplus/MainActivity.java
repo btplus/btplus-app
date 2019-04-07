@@ -16,6 +16,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        progress = ProgressDialog.show(MainActivity.this, "Carregando", "Buscando em nossa base...", true);
+        progress = ProgressDialog.show(MainActivity.this, "Carregando", "Aguarde alguns instantes...", true);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         switch (requestCode) {
             case SPEECH_RECOGNITION_CODE: {
                 if (resultCode == RESULT_OK && null != data) {
-                    progress = ProgressDialog.show(MainActivity.this, "Carregando", "Buscando em nossa base...", true);
+                    progress = ProgressDialog.show(MainActivity.this, "Carregando", "Aguarde alguns instantes...", true);
 
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
@@ -236,6 +238,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
                             recyclerView.setAdapter(compromissoCustomAdapter);
                         }
+                    } else {
+                        listCompromisso = new ArrayList<Compromisso>();
+                        CompromissoCustomAdapter compromissoCustomAdapter;
+                        compromissoCustomAdapter = new CompromissoCustomAdapter(MainActivity.this, listCompromisso);
+
+                        recyclerView.setAdapter(compromissoCustomAdapter);
+
                     }
 
 
@@ -296,5 +305,23 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     }
                 }
         };
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.oportunidade) {
+            Intent intent = new Intent(MainActivity.this, OpportunityActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
