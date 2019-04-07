@@ -1,10 +1,13 @@
 package com.hackathon.btp.btplus.model;
 
+import java.util.ArrayList;
+
 public class Payload {
 
     String text;
     Object context;
     String output;
+    ArrayList<Compromisso> compromissos;
 
     public String getText() {
         return text;
@@ -29,5 +32,13 @@ public class Payload {
 
     public void setOutput(String output) {
         this.output = output;
+    }
+
+    public ArrayList<Compromisso> getCompromissos() {
+        return compromissos;
+    }
+
+    public void setCompromissos(ArrayList<Compromisso> compromissos) {
+        this.compromissos = compromissos;
     }
 }

@@ -2,19 +2,27 @@ package com.hackathon.btp.btplus;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.hackathon.btp.btplus.adapter.CompromissoCustomAdapter;
+import com.hackathon.btp.btplus.model.Compromisso;
 import com.hackathon.btp.btplus.model.Payload;
 import com.hackathon.btp.btplus.service.APIClient;
 import com.hackathon.btp.btplus.service.APIInterface;
@@ -40,15 +48,20 @@ import javax.net.ssl.X509TrustManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+
+import android.support.v7.widget.Toolbar;
 import retrofit2.Response;
 
-public class MainActivity extends Activity implements TextToSpeech.OnInitListener {
+public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     private final int SPEECH_RECOGNITION_CODE = 1;
-    private ImageButton btnMicrophone;
+    private ImageView btnMicrophone;
     private TextToSpeech t1;
-
+    private ProgressDialog progress;
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        progress = ProgressDialog.show(MainActivity.this, "Carregando", "Buscando em nossa base...", true);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -69,6 +82,23 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 //                }, 4000);
             }
         });
+
+        context = this;
+
+        // Instance RecyclerView for list biddings
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+        recyclerView = (RecyclerView) findViewById(R.id.listCompromisso);
+        recyclerView.setLayoutManager(mLayoutManager);
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+
+
+        progress.dismiss();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
     }
 
     private TextToSpeech myTTS;
@@ -139,6 +169,8 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
         switch (requestCode) {
             case SPEECH_RECOGNITION_CODE: {
                 if (resultCode == RESULT_OK && null != data) {
+                    progress = ProgressDialog.show(MainActivity.this, "Carregando", "Buscando em nossa base...", true);
+
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     String text = result.get(0);
@@ -163,7 +195,11 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 
     private Payload payload;
 
+    private RecyclerView recyclerView;
+    private ArrayList<Compromisso> listCompromisso;
+
     protected void interact() {
+
         apiService = APIClient.getService().create(APIInterface.class);
         callBalance = apiService.postVoice(payload);
 
@@ -176,6 +212,8 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
         }
         Log.i("Request in API", "" + callBalance.request().url().toString());
 
+        listCompromisso = new ArrayList<>();
+
         callBalance.enqueue(new Callback<Payload>() {
             @Override
             public void onResponse(Call<Payload> call, Response<Payload> response) {
@@ -187,15 +225,33 @@ public class MainActivity extends Activity implements TextToSpeech.OnInitListene
 
                     payload = payloadResponse;
 
+                    if(payload.getCompromissos() != null ) {
+                        if(payload.getCompromissos().size() > 0) {
+                            for (Compromisso compromisso : payload.getCompromissos()) {
+                                listCompromisso.add(new Compromisso(compromisso.getTitulo(), compromisso.getStatus(), compromisso.getTipo(), compromisso.getTipoCompromisso(), compromisso.getDataVencimento()));
+                            }
+
+                            CompromissoCustomAdapter compromissoCustomAdapter;
+                            compromissoCustomAdapter = new CompromissoCustomAdapter(MainActivity.this, listCompromisso);
+
+                            recyclerView.setAdapter(compromissoCustomAdapter);
+                        }
+                    }
+
+
+
                     Log.e("RESULT REQUEST", payload.getOutput());
+                    progress.dismiss();
                 }
 
                 Log.e("RESULT REQUEST", "" + response.body());
+                progress.dismiss();
             }
 
             @Override
             public void onFailure(Call<Payload> call, Throwable t) {
                 Log.e("BALANCE", t.toString());
+                progress.dismiss();
             }
         });
     }
